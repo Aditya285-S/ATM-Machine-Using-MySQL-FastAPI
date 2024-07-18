@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Check Card and PIN</title>
+    <link rel="stylesheet" href="../static/style.css">
+</head>
+<body>
+    <div class="container">
+        <button class="home-button" onclick="navigateTo('/')">Home</button>
+        <h1>Check Card and PIN</h1>
+        <div class="form-group">
+            <label for="cardNo">Card Number:</label>
+            <input type="text" id="cardNo">
+        </div>
+        <div class="form-group">
+            <label for="pin">PIN:</label>
+            <input type="password" id="pin">
+        </div>
+        <button onclick="checkCardPin()">Check</button>
+        <div id="output"></div>
+    </div>
+    <script>
+        const apiUrl = 'http://127.0.0.1:8000';
+
+        function checkCardPin() {
+            const cardNo = document.getElementById('cardNo').value;
+            const pin = document.getElementById('pin').value;
+            fetch(`${apiUrl}/checkdetails_add?card_no=${cardNo}&pin=${pin}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ card_no: parseInt(cardNo), pin: parseInt(pin) })
+            })
+            .then(response => response.json())
+            .then(data => {
+                const output = document.getElementById('output');
+                if (data.message) {
+                    output.innerHTML = `<div class="success-message">${data.message}</div>`;
+                    setTimeout(() => {
+                        window.location.href = `checkdetails_add/addmoney?card_no=${cardNo}&pin=${pin}`;
+                    }, 2000);
+                } else if (data.detail) {
+                    output.innerHTML = `<div class="error-message">${data.detail}</div>`;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                const output = document.getElementById('output');
+                output.innerHTML = `<div class="error-message">An error occurred. Please try again.</div>`;
+            });
+        }
+
+        function navigateTo(page) {
+            window.location.href = page;
+        }
+    </script>
+</body>
+</html>

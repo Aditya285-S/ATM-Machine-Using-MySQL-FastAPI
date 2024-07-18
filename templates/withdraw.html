@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Withdraw</title>
+    <link rel="stylesheet" href="../static/style.css">
+</head>
+<body>
+    <div class="container">
+        <button class="home-button" onclick="navigateTo('/')">Home</button>
+        <h1>Withdraw</h1>
+        <div class="form-group">
+            <label for="withdrawAmount">Amount:</label>
+            <input type="text" id="withdrawAmount">
+        </div>
+        <button onclick="withdraw()">Withdraw</button>
+        <div id="output"></div>
+    </div>
+    <script>
+        const apiUrl = 'http://127.0.0.1:8000';
+
+        function withdraw() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const cardNo = urlParams.get('card_no');
+            const pin = urlParams.get('pin');
+            const amount = document.getElementById('withdrawAmount').value;
+            fetch(`${apiUrl}/checkdetails_withdraw/withdraw?card_no=${cardNo}&pin=${pin}&amount=${amount}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ card_no: parseInt(cardNo), pin: parseInt(pin), amount: parseFloat(amount) })
+            })
+            .then(response => response.json())
+            .then(data => {
+                const output = document.getElementById('output');
+                if (data.message) {
+                    output.innerHTML = `<div class="success-message">${data.message}</div>`;
+                } else if (data.detail) {
+                    output.innerHTML = `<div class="error-message">${data.detail}</div>`;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                const output = document.getElementById('output');
+                output.innerHTML = `<div class="error-message">An error occurred. Please try again.</div>`;
+            });
+        }
+
+        function navigateTo(page) {
+            window.location.href = page;
+        }
+    </script>
+</body>
+</html>

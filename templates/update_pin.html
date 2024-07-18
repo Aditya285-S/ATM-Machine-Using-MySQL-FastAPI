@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update PIN</title>
+    <link rel="stylesheet" href="../static/style.css">
+</head>
+<body>
+    <div class="container">
+        <button class="home-button" onclick="navigateTo('/')">Home</button>
+        <h1>Update PIN</h1>
+        <div class="form-group">
+            <label for="updatePinCardNo">Card Number:</label>
+            <input type="text" id="updatePinCardNo">
+        </div>
+        <div class="form-group">
+            <label for="updatePinPin">New PIN:</label>
+            <input type="password" id="updatePinPin">
+        </div>
+        <button onclick="updatePin()">Update PIN</button>
+        <div id="output"></div>
+    </div>
+    <script>
+        const apiUrl = 'http://127.0.0.1:8000';
+
+        function updatePin() {
+            const cardNo = document.getElementById('updatePinCardNo').value;
+            const pin = document.getElementById('updatePinPin').value;
+            fetch(`${apiUrl}/updatepin?card_no=${cardNo}&pin=${pin}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ card_no: parseInt(cardNo), pin: parseInt(pin) })
+            })
+            .then(response => response.json())
+            .then(data => {
+                const output = document.getElementById('output');
+                if (data.message) {
+                    output.innerHTML = `<div class="success-message">${data.message}</div>`;
+                } else if (data.detail) {
+                    output.innerHTML = `<div class="error-message">${data.detail}</div>`;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                const output = document.getElementById('output');
+                output.innerHTML = `<div class="error-message">An error occurred. Please try again.</div>`;
+            });
+        }
+
+        function navigateTo(page) {
+            window.location.href = page;
+        }
+    </script>
+</body>
+</html>

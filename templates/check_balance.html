@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Check Balance</title>
+    <link rel="stylesheet" href="../static/style.css">
+</head>
+<body>
+    <div class="container">
+        <button class="home-button" onclick="navigateTo('/')">Home</button>
+        <h1>Check Balance</h1>
+        <div class="form-group">
+            <label for="checkBalanceCardNo">Card Number:</label>
+            <input type="text" id="checkBalanceCardNo">
+        </div>
+        <div class="form-group">
+            <label for="checkBalancePin">PIN:</label>
+            <input type="password" id="checkBalancePin">
+        </div>
+        <button onclick="checkBalance()">Check Balance</button>
+        <div id="output"></div>
+    </div>
+    <script>
+        const apiUrl = 'http://127.0.0.1:8000';
+
+        function checkBalance() {
+            const cardNo = document.getElementById('checkBalanceCardNo').value;
+            const pin = document.getElementById('checkBalancePin').value;
+            fetch(`${apiUrl}/balance?card_no=${cardNo}&pin=${pin}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                const output = document.getElementById('output');
+                if (data.message) {
+                    output.innerHTML = `<div class="success-message">${data.message}</div>`;
+                } else if (data.detail) {
+                    output.innerHTML = `<div class="error-message">${data.detail}</div>`;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                const output = document.getElementById('output');
+                output.innerHTML = `<div class="error-message">An error occurred. Please try again.</div>`;
+            });
+        }
+
+        function navigateTo(page) {
+            window.location.href = page;
+        }
+    </script>
+</body>
+</html>
