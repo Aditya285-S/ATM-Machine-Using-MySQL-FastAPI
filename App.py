@@ -10,12 +10,17 @@ app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
 
+@app.head("/")
+async def read_root_head():
+    return JSONResponse(content={})
 
 @app.get('/')
 def main(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
-
+@app.head("/user")
+async def user_head():
+    return JSONResponse(content={})
 
 @app.get('/user')
 def get_create_user(request: Request):
@@ -30,12 +35,13 @@ async def create_user(card_no: int, name: str):
         if result['status']:
             return JSONResponse(content={'message': result['value']})
         else:
-            raise HTTPException(status_code=400, detail=result['value'])
+            raise HTTPException(status_code=400, detail=result['value']})
     finally:
         conn.close()
 
-
-
+@app.head("/createpin")
+async def create_pin_head():
+    return JSONResponse(content={})
 
 @app.get('/createpin')
 def get_create_pin(request: Request):
@@ -50,12 +56,13 @@ async def create_pin(card_no: int, pin: int):
         if result['status']:
             return JSONResponse(content={'message': result['value']})
         else:
-            raise HTTPException(status_code=400, detail=result['value'])
+            raise HTTPException(status_code=400, detail=result['value']})
     finally:
         conn.close()
 
-
-
+@app.head("/updatepin")
+async def update_pin_head():
+    return JSONResponse(content={})
 
 @app.get('/updatepin')
 def get_update_pin(request: Request):
@@ -70,15 +77,16 @@ async def update_pin(card_no: int, pin: int):
         if result['status']:
             return JSONResponse(content={'message': result['value']})
         else:
-            raise HTTPException(status_code=400, detail=result['value'])
+            raise HTTPException(status_code=400, detail=result['value']})
     finally:
         conn.close()
 
-
-
+@app.head("/balance")
+async def balance_head():
+    return JSONResponse(content={})
 
 @app.get('/balance')
-def get_check_balance(request : Request):
+def get_check_balance(request: Request):
     return templates.TemplateResponse('check_balance.html', {'request': request})
 
 @app.post('/balance')
@@ -90,12 +98,13 @@ async def check_balance(card_no: int, pin: int):
         if result['status']:
             return JSONResponse(content={'message': result['value']})
         else:
-            raise HTTPException(status_code=400, detail=result['value'])
+            raise HTTPException(status_code=400, detail=result['value']})
     finally:
         conn.close()
 
-
-
+@app.head("/checkdetails_add")
+async def check_details_add_head():
+    return JSONResponse(content={})
 
 @app.get('/checkdetails_add')
 def get_details(request: Request):
@@ -110,9 +119,13 @@ async def check_details(card_no: int, pin: int):
         if result['status']:
             return JSONResponse(content = {'message': result['value']})
         else:
-            return HTTPException(status_code=400, detail=result['value'])
+            raise HTTPException(status_code=400, detail=result['value']})
     finally:
         conn.close()
+
+@app.head("/checkdetails_add/addmoney")
+async def check_details_add_money_head():
+    return JSONResponse(content={})
 
 @app.get('/checkdetails_add/addmoney')
 def get_details(request: Request):
@@ -127,12 +140,13 @@ async def add_money(card_no: int, pin: int, amount: float):
         if result['status']:
             return JSONResponse(content={'message': result['value']})
         else:
-            raise HTTPException(status_code=400, detail=result['value'])
+            raise HTTPException(status_code=400, detail=result['value']})
     finally:
         conn.close()
 
-
-
+@app.head("/checkdetails_withdraw")
+async def check_details_withdraw_head():
+    return JSONResponse(content={})
 
 @app.get('/checkdetails_withdraw')
 def get_details(request: Request):
@@ -147,16 +161,20 @@ async def check_details(card_no: int, pin: int):
         if result['status']:
             return JSONResponse(content = {'message': result['value']})
         else:
-            return HTTPException(status_code=400, detail=result['value'])
+            raise HTTPException(status_code=400, detail=result['value']})
     finally:
         conn.close()
+
+@app.head("/checkdetails_withdraw/withdraw")
+async def withdraw_head():
+    return JSONResponse(content={})
 
 @app.get('/checkdetails_withdraw/withdraw')
 def get_details(request: Request):
     return templates.TemplateResponse('withdraw.html', {'request': request})
 
 @app.put('/checkdetails_withdraw/withdraw')
-async def add_money(card_no: int, pin: int, amount: float):
+async def withdraw(card_no: int, pin: int, amount: float):
     conn = connect_db()
     try:
         obj = Atm(conn)
@@ -164,12 +182,13 @@ async def add_money(card_no: int, pin: int, amount: float):
         if result['status']:
             return JSONResponse(content={'message': result['value']})
         else:
-            raise HTTPException(status_code=400, detail=result['value'])
+            raise HTTPException(status_code=400, detail=result['value']})
     finally:
         conn.close()
 
-
-
+@app.head("/card_details")
+async def card_details_head():
+    return JSONResponse(content={})
 
 @app.get('/card_details')
 def user_details(request: Request):
@@ -184,6 +203,6 @@ async def get_card_details(card_no: int):
         if result['status']:
             return JSONResponse(content={'message': result['value']})
         else:
-            raise HTTPException(status_code=400, detail=result['value'])
+            raise HTTPException(status_code=400, detail=result['value']})
     finally:
         conn.close()
