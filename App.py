@@ -35,7 +35,7 @@ async def create_user(card_no: int, name: str):
         if result['status']:
             return JSONResponse(content={'message': result['value']})
         else:
-            raise HTTPException(status_code=400, detail=result['value']})
+            raise HTTPException(status_code=400, detail=result['value'])
     finally:
         conn.close()
 
@@ -56,7 +56,7 @@ async def create_pin(card_no: int, pin: int):
         if result['status']:
             return JSONResponse(content={'message': result['value']})
         else:
-            raise HTTPException(status_code=400, detail=result['value']})
+            raise HTTPException(status_code=400, detail=result['value'])
     finally:
         conn.close()
 
@@ -77,7 +77,7 @@ async def update_pin(card_no: int, pin: int):
         if result['status']:
             return JSONResponse(content={'message': result['value']})
         else:
-            raise HTTPException(status_code=400, detail=result['value']})
+            raise HTTPException(status_code=400, detail=result['value'])
     finally:
         conn.close()
 
@@ -98,7 +98,7 @@ async def check_balance(card_no: int, pin: int):
         if result['status']:
             return JSONResponse(content={'message': result['value']})
         else:
-            raise HTTPException(status_code=400, detail=result['value']})
+            raise HTTPException(status_code=400, detail=result['value'])
     finally:
         conn.close()
 
@@ -119,7 +119,7 @@ async def check_details(card_no: int, pin: int):
         if result['status']:
             return JSONResponse(content = {'message': result['value']})
         else:
-            raise HTTPException(status_code=400, detail=result['value']})
+            raise HTTPException(status_code=400, detail=result['value'])
     finally:
         conn.close()
 
@@ -140,7 +140,7 @@ async def add_money(card_no: int, pin: int, amount: float):
         if result['status']:
             return JSONResponse(content={'message': result['value']})
         else:
-            raise HTTPException(status_code=400, detail=result['value']})
+            raise HTTPException(status_code=400, detail=result['value'])
     finally:
         conn.close()
 
@@ -161,7 +161,7 @@ async def check_details(card_no: int, pin: int):
         if result['status']:
             return JSONResponse(content = {'message': result['value']})
         else:
-            raise HTTPException(status_code=400, detail=result['value']})
+            raise HTTPException(status_code=400, detail=result['value'])
     finally:
         conn.close()
 
@@ -182,7 +182,7 @@ async def withdraw(card_no: int, pin: int, amount: float):
         if result['status']:
             return JSONResponse(content={'message': result['value']})
         else:
-            raise HTTPException(status_code=400, detail=result['value']})
+            raise HTTPException(status_code=400, detail=result['value'])
     finally:
         conn.close()
 
@@ -203,6 +203,6 @@ async def get_card_details(card_no: int):
         if result['status']:
             return JSONResponse(content={'message': result['value']})
         else:
-            raise HTTPException(status_code=400, detail=result['value']})
+            raise HTTPException(status_code=400, detail=result['value'])
     finally:
         conn.close()
